@@ -1,4 +1,4 @@
-## Các lệnh cơ bản của DOCKER
+# Các lệnh cơ bản của DOCKER
 
 **1. Image**
 
@@ -51,3 +51,48 @@
 
 - `docker exec <container-id> <command>`: Chạy một lệnh trong container đang chạy.
 - `docker exec -it <container-id> sh | bash`: Tạo một terminal trong container.
+
+**1. Port Mapping**
+
+- `docker run -p <host-port>:<container-port> <image>`: Map port từ host vào container.
+
+**2. Logs trace**
+
+- `docker logs -f <container-id>`: Xem logs của container đang chạy.
+
+**3. Volume - bind mount**
+
+- Volume: Là một thư mục (ảo) hoặc file nằm ngoài container, được mount vào container.
+- Thao tác này gọi là bind mount.
+
+- Trình tự:
+  - `docker volume create <volume-name>`: Tạo volume.
+  - `docker run -v <volume-name>:<container-path> <image>`: Mount volume vào container.
+
+# Cách tạo Dockerfile
+
+**1. Cách tạo image**
+
+- `docker build -t <image-name> .`: Tạo image từ Dockerfile.
+
+**2. Các lệnh dockerfile**
+
+- FROM <images>: Image cơ sở.
+- RUN <command>: Chạy lệnh.
+- WORKDIR <directory>: Thư mục làm việc.
+- COPY <src> <dest>: Copy file từ host vào container.
+- ADD <src/URL> <dest>: Tương tự như copy nhưng hỗ trợ URL và có thể tự giải nén.
+- EXPOSE <port>: Mở port.
+- CMD <command argument1 argument2...>: Lệnh mặc định khi chạy container (Hook command) (Shell form).
+- CMD [command argument1 argument2...]: Lệnh mặc định khi chạy container (Hook command) (Exec form - Recommend).
+
+**3. Quy trình chạy Dockerfile**
+
+- Image được tạo ra từ nhiều layer. Mỗi lệnh trong Dockerfile tạo ra một layer.
+- Khi building image, Docker sẽ duyệt từng lệnh trong Dockerfile và tạo ra một layer tương ứng.
+- Qua mỗi câu lệnh, Docker sẽ tạo một container tạm thời từ layer image trước đó và sao lưu sang layer mới. Xong câu lệnh tiếp theo, container tạm thời sẽ bị xóa và tạo container mới từ layer mới cho đến khi hoàn thành Dockerfile.
+
+**4. Push image lên registry**
+
+- `docker login`: Đăng nhập vào registry.
+- `docker push <image-name>:<tag>`: Đẩy image lên registry.
